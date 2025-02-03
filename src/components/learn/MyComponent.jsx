@@ -1,8 +1,11 @@
+import './style.css';
 const MyComponent = ()=>{
   return (
-    <div>
-      <h2>My Component</h2>
-    </div>
+    <>
+        <div className="child" style={{fontSize:"10px"}}>Quang Toan</div>
+        <div>MyComponent</div>
+
+    </>
   )
 }
 export default MyComponent;
