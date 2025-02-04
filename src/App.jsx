@@ -16,7 +16,11 @@ const App = () => {
     country: "vietnam",
   }
   const addNewTodo = (name) => {
-    alert(`Please call ${name}`)
+    const newTodo = {
+      id: todoList.length + 1,
+      name: name,
+    }
+    SetTodoList([...todoList,newTodo]);
   }
   return (
     <div className="todo-container">
