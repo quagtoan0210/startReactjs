@@ -4,14 +4,13 @@ import reactLogo from './assets/react.svg';
 import './components/todo/todo.css';
 import { useState } from 'react';
 const App = () => {
-  const [todoList,SetTodoList]= useState([]);
-  
+  const [todoList, SetTodoList] = useState([]);
   const addNewTodo = (name) => {
     const newTodo = {
       id: todoList.length + 1,
       name: name,
     }
-    SetTodoList([...todoList,newTodo]);
+    SetTodoList([...todoList, newTodo]);
   }
   return (
     <div className="todo-container">
@@ -19,12 +18,22 @@ const App = () => {
       <TodoNew
         addNewTodo={addNewTodo}
       />
-      <TodoData
+      {todoList.length > 0 ?
+        <TodoData
+          todoList={todoList}
+        />
+        :
+        <div className='todo-image'>
+          <img src={reactLogo} className='logo' />
+        </div>
+      }
+      {/* {todoList.length > 0 && <TodoData
         todoList={todoList}
-      />
-      <div className='todo-image'>
+      />}
+
+      {todoList.length === 0 && <div className='todo-image'>
         <img src={reactLogo} className='logo' />
-      </div>
+      </div>} */}
     </div>
   )
 }
