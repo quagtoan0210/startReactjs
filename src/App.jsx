@@ -3,6 +3,8 @@ import TodoData from './components/todo/TodoData.jsx';
 import reactLogo from './assets/react.svg';
 import './components/todo/todo.css';
 import { useState } from 'react';
+import Header from './components/layout/header';
+import Footer from './components/layout/footer';
 const App = () => {
   const [todoList, SetTodoList] = useState([]);
   const addNewTodo = (name) => {
@@ -17,6 +19,8 @@ const App = () => {
     SetTodoList(newTodo);
   }
   return (
+    <>
+    <Header />
     <div className="todo-container">
       <div className="todo-title">Todo List</div>
       <TodoNew
@@ -40,6 +44,8 @@ const App = () => {
         <img src={reactLogo} className='logo' />
       </div>} */}
     </div>
+    <Footer />
+    </>
   )
 }
 
