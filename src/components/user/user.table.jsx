@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Popconfirm, notification, Table } from 'antd';
+import { Popconfirm, Table, notification } from 'antd';
 import UpdateUserModal from './update.user.modal';
 import { useState } from 'react';
 import ViewUserDetail from './view.user.detail';
@@ -7,11 +7,27 @@ import { deleteUserAPI } from '../../services/api.service';
 
 const UserTable = (props) => {
     const { dataUsers, loadUser } = props;
+
     const [isModalUpdateOpen, setIsModalUpdateOpen] = useState(false);
+
     const [dataUpdate, setDataUpdate] = useState(null);
+
     const [dataDetail, setDataDetail] = useState(null);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
+
     const columns = [
+        {
+            title: "STT",
+            render: (_, record, index) => {
+                return (
+                    <>
+                        {index + 1}
+
+                    </>
+                )
+            }
+
+        },
         {
             title: 'Id',
             dataIndex: '_id',
@@ -40,17 +56,20 @@ const UserTable = (props) => {
             key: 'action',
             render: (_, record) => (
                 <div style={{ display: "flex", gap: "20px" }}>
-                    <EditOutlined onClick={() => {
-                        setDataUpdate(record);
-                        setIsModalUpdateOpen(true)
-                    }} style={{ cursor: "pointer", color: "orange" }} />
+                    <EditOutlined
+                        onClick={() => {
+                            setDataUpdate(record);
+                            setIsModalUpdateOpen(true);
+                        }}
+                        style={{ cursor: "pointer", color: "orange" }} />
                     <Popconfirm
                         title="Xóa người dùng"
                         description="Bạn chắc chắn xóa user này ?"
                         onConfirm={() => handleDeleteUser(record._id)}
                         okText="Yes"
                         cancelText="No"
-                        placement="leftTop"
+                        placement="left"
+
                     >
                         <DeleteOutlined style={{ cursor: "pointer", color: "red" }} />
                     </Popconfirm>
@@ -58,6 +77,7 @@ const UserTable = (props) => {
             ),
         },
     ];
+
     const handleDeleteUser = async (id) => {
         const res = await deleteUserAPI(id);
         if (res.data) {
@@ -66,6 +86,7 @@ const UserTable = (props) => {
                 description: "Xóa user thành công"
             })
             await loadUser();
+
         } else {
             notification.error({
                 message: "Error delete user",
@@ -73,6 +94,7 @@ const UserTable = (props) => {
             })
         }
     }
+
     return (
         <>
             <Table
@@ -87,11 +109,13 @@ const UserTable = (props) => {
                 setDataUpdate={setDataUpdate}
                 loadUser={loadUser}
             />
+
             <ViewUserDetail
                 dataDetail={dataDetail}
                 setDataDetail={setDataDetail}
                 isDetailOpen={isDetailOpen}
                 setIsDetailOpen={setIsDetailOpen}
+                loadUser={loadUser}
             />
         </>
     )
