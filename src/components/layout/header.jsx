@@ -1,17 +1,44 @@
-import { Link, NavLink } from 'react-router-dom';
-import { Menu } from 'antd';
-import { UsergroupAddOutlined, HomeOutlined, AuditOutlined, SettingOutlined } from '@ant-design/icons';
-import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Menu, message } from 'antd';
+import {
+    UsergroupAddOutlined, LoginOutlined,
+    HomeOutlined, AuditOutlined, AliwangwangOutlined
+} from '@ant-design/icons';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/auth.context';
+import { logoutAPI } from '../../services/api.service';
 
 const Header = () => {
     const [current, setCurrent] = useState('');
-    const {user} = useContext(AuthContext);
-    console.log(user);
+    const navigate = useNavigate();
+
+    const { user, setUser } = useContext(AuthContext);
+
+  
+
     const onClick = (e) => {
-        console.log('click ', e);
         setCurrent(e.key);
     };
+
+    const handleLogout = async () => {
+        const res = await logoutAPI();
+        if (res.data) {
+            //clear data
+            localStorage.removeItem("access_token");
+            setUser({
+                email: "",
+                phone: "",
+                fullName: "",
+                role: "",
+                avatar: "",
+                id: ""
+            })
+            message.success("Logout thành công.");
+
+            //redirect to home
+            navigate("/");
+        }
+    }
 
     const items = [
         {
@@ -30,21 +57,24 @@ const Header = () => {
             icon: <AuditOutlined />,
         },
 
-        {
-            label: 'Cài đặt',
+        ...(!user.id ? [{
+            label: <Link to={"/login"}>Đăng nhập</Link>,
+            key: 'login',
+            icon: <LoginOutlined />,
+        }] : []),
+
+        ...(user.id ? [{
+            label: `Welcome ${user.fullName}`,
             key: 'setting',
-            icon: <SettingOutlined />,
+            icon: <AliwangwangOutlined />,
             children: [
                 {
-                    label: <Link to={"/login"}>Đăng nhập</Link>,
-                    key: 'login',
-                },
-                {
-                    label: 'Đăng xuất',
+                    label: <span onClick={() => handleLogout()}>Đăng xuất</span>,
                     key: 'logout',
                 },
             ],
-        },
+        }] : []),
+
 
     ];
 
